@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자배원 심사용 진단서 작성기</title>
+  <!-- Google Fonts & Tailwind CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+    input[type="date"] {
+      cursor: pointer;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-5xl xl:max-w-6xl mx-auto">
+    <!-- Header -->
+    <header class="mb-8 text-center">
+      <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
+        자배원 심사용 진단서 작성기
+      </h1>
+      <p class="text-sm text-slate-500 mt-2">
+        자동차손해배상진흥원(자배원) 심사를 위한 진단서 자동 생성기
+      </p>
+      <p class="text-xs text-slate-400 mt-1.5" id="lastUpdatedText">
+        최종 업데이트 : 2026.10.25.
+      </p>
+    </header>
+
+    <!-- 2 Column Layout (PC: Left Form, Right Result) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+      
+      <!-- Left Column: Form -->
+      <main class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+      
+      <!-- 1. 사고 발생일 -->
+      <section>
+        <label for="accidentDate" class="block text-sm font-semibold text-slate-700 mb-2">
+          1. 사고 발생일
+        </label>
+        <input type="date" id="accidentDate" onclick="this.showPicker && this.showPicker()" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-700 outline-none transition text-base cursor-pointer">
+      </section>
+
+      <!-- 2. 치료 기간 연장 필요 사유 -->
+      <section class="pt-2 border-t border-slate-100">
+        <label for="extensionReason" class="block text-sm font-semibold text-slate-700 mb-2">
+          2. 치료 기간 연장 필요 사유
+        </label>
+        <textarea id="extensionReason" rows="2" placeholder="예) Neck Pain & Rt. Upperlimb Numbness (NRS 7, Spurling +/-, C-ROM Rot. 30+/45-)" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-700 outline-none transition text-sm placeholder-slate-400"></textarea>
+      </section>
+
+      <!-- 3. 영상 검사 시행 유무 -->
+      <section class="pt-2 border-t border-slate-100">
+        <label class="block text-sm font-semibold text-slate-700 mb-3">
+          3. 영상 검사 시행 유무
+        </label>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="cursor-pointer">
+            <input type="radio" name="imagingTest" value="시행" class="peer sr-only" onchange="toggleImagingSection(true)">
+            <div class="flex items-center justify-center py-3 px-4 rounded-xl border border-slate-300 bg-white font-medium text-slate-700 transition peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 peer-checked:shadow-sm">
+              시행
+            </div>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="imagingTest" value="미시행" class="peer sr-only" onchange="toggleImagingSection(false)">
+            <div class="flex items-center justify-center py-3 px-4 rounded-xl border border-slate-300 bg-white font-medium text-slate-700 transition peer-checked:bg-rose-600 peer-checked:text-white peer-checked:border-rose-600 peer-checked:shadow-sm">
+              미시행
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- 2-1. 영상 검사 세부항목 (YES 선택 시 표시) -->
+      <section id="imagingDetailsSection" class="hidden bg-slate-50 border border-slate-200/80 rounded-2xl p-5 space-y-5 transition-all">
+        <div class="flex items-center gap-2 text-blue-700 text-sm font-semibold pb-1 border-b border-slate-200">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          영상검사 세부 정보
+        </div>
+
+        <!-- 영상검사 시행일 -->
+        <div class="flex items-center gap-3">
+          <label for="imagingDate" class="w-28 flex-shrink-0 text-xs font-semibold text-slate-600">
+            영상검사 시행일
+          </label>
+          <div class="flex-1">
+            <input type="date" id="imagingDate" onclick="this.showPicker && this.showPicker()" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-700 text-sm outline-none transition cursor-pointer">
+          </div>
+        </div>
+
+        <!-- 영상검사 의료기관 -->
+        <div class="flex items-center gap-3">
+          <label for="imagingHospital" class="w-28 flex-shrink-0 text-xs font-semibold text-slate-600">
+            영상검사 의료기관
+          </label>
+          <div class="flex-1">
+            <input type="text" id="imagingHospital" placeholder="예) XX병원, XX정형외과 등" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-700 text-sm outline-none transition placeholder-slate-400">
+          </div>
+        </div>
+
+        <!-- 검사 부위 -->
+        <div class="flex items-start gap-3">
+          <label class="w-28 flex-shrink-0 text-xs font-semibold text-slate-600 pt-2">
+            검사 부위
+          </label>
+          <div class="flex-1 grid grid-cols-3 gap-2" id="bodyPartContainer">
+            <!-- 1행: Brain, C-Spine, L-Spine -->
+            <label class="cursor-pointer">
+              <input type="radio" name="bodyPart" value="Brain" class="peer sr-only">
+              <div class="text-center py-2 px-2 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition">
+                Brain
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="bodyPart" value="C-Spine" class="peer sr-only">
+              <div class="text-center py-2 px-2 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition">
+                C-Spine
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="bodyPart" value="L-Spine" class="peer sr-only">
+              <div class="text-center py-2 px-2 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition">
+                L-Spine
+              </div>
+            </label>
+
+            <!-- 2행: Shoulder, Elbow, Wrist -->
+            <label class="cursor-pointer">
+              <input type="radio" name="bodyPart" value="Shoulder" class="peer sr-only">
+              <div class="text-center py-2 px-2 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition">
+                Shoulder
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="bodyPart" value="Elbow" class="peer sr-only">
+              <div class="text-center py-2 px-2 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition">
+                Elbow
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="bodyPart" value="Wrist" class="peer sr-only">
+              <div class="text-center py-2 px-2 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition">
+                Wrist
+              </div>
+            </label>
+
+            <!-- 3행: Hip, Knee, Ankle -->
+            <label class="cursor-pointer">
+              <input type="radio" name="bodyPart" value="Hip" class="peer sr-only">
+              <div class="text-center py-2 px-2 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition">
+                Hip
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="bodyPart" value="Knee" class="peer sr-only">
+              <div class="text-center py-2 px-2 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition">
+                Knee
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="bodyPart" value="Ankle" class="peer sr-only">
+              <div class="text-center py-2 px-2 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition">
+                Ankle
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- 검사 종류 -->
+        <div class="flex items-center gap-3">
+          <label class="w-28 flex-shrink-0 text-xs font-semibold text-slate-600">
+            검사 종류
+          </label>
+          <div class="flex-1 grid grid-cols-3 gap-2">
+            <!-- MRI, CT, X-Ray -->
+            <label class="cursor-pointer">
+              <input type="radio" name="imagingType" value="MRI" class="peer sr-only">
+              <div class="text-center py-2 px-3 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">
+                MRI
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="imagingType" value="CT" class="peer sr-only">
+              <div class="text-center py-2 px-3 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">
+                CT
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="imagingType" value="X-Ray" class="peer sr-only">
+              <div class="text-center py-2 px-3 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">
+                X-Ray
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- 검사 내용 -->
+        <div>
+          <label for="imagingContent" class="block text-xs font-semibold text-slate-600 mb-1.5">
+            검사 내용 (판독 결과 및 주요 소견)
+          </label>
+          <textarea id="imagingContent" rows="3" placeholder="예) L4/5 추간판탈출증 소견 등" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-700 text-sm outline-none transition placeholder-slate-400"></textarea>
+        </div>
+      </section>
+
+      <!-- 4. 8주 이후 치료 필요 기간 -->
+      <section class="pt-2 border-t border-slate-100">
+        <label class="block text-sm font-semibold text-slate-700 mb-3">
+          4. 8주 이후 치료 필요 기간
+        </label>
+        <div class="grid grid-cols-3 gap-3">
+          <label class="cursor-pointer">
+            <input type="radio" name="treatmentDuration" value="2주" class="peer sr-only">
+            <div class="py-3 text-center rounded-xl border border-slate-300 font-semibold text-sm text-slate-600 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition shadow-sm">
+              2주
+            </div>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="treatmentDuration" value="3주" class="peer sr-only">
+            <div class="py-3 text-center rounded-xl border border-slate-300 font-semibold text-sm text-slate-600 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition shadow-sm">
+              3주
+            </div>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="treatmentDuration" value="4주" class="peer sr-only">
+            <div class="py-3 text-center rounded-xl border border-slate-300 font-semibold text-sm text-slate-600 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition shadow-sm">
+              4주
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- 작성하기 버튼 -->
+      <div class="pt-4">
+        <button type="button" onclick="generateCertificate()" class="w-full py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-base transition duration-150 flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+          작성하기
+        </button>
+      </div>
+    </main>
+
+    <!-- Right Column: Result Box (PC sticky on right side) -->
+    <aside id="resultCard" class="hidden lg:block lg:sticky lg:top-8 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 transition-all">
+      
+      <!-- 작성 전 안내 상태 -->
+      <div id="resultPlaceholder" class="flex flex-col items-center justify-center py-20 text-center text-slate-400">
+        <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center mb-4 border border-blue-100">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        </div>
+        <h3 class="font-bold text-slate-700 text-base mb-1">진단서 소견서 미리보기</h3>
+        <p class="text-sm text-slate-400 max-w-xs leading-relaxed">
+          좌측 폼을 작성하신 후 <span class="text-blue-600 font-semibold">'작성하기'</span> 버튼을 누르면 이곳에 소견서 양식이 완성되어 표시됩니다.
+        </p>
+      </div>
+
+      <!-- 작성 후 결과 박스 -->
+      <div id="resultContent" class="hidden space-y-5">
+        <!-- 1) 진단서 결과값 -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              진단서 결과값
+            </h2>
+            <button type="button" onclick="copyResult()" class="text-xs font-semibold px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white rounded-lg transition shadow-sm flex items-center gap-1.5" id="copyBtn">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+              <span>진단서 복사</span>
+            </button>
+          </div>
+
+          <div class="relative">
+            <textarea id="resultText" rows="10" placeholder="작성된 진단서 내용이 이곳에 표시되며 직접 수정할 수 있습니다." class="w-full p-4 rounded-xl border border-slate-300 bg-white font-mono text-sm leading-relaxed text-slate-800 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y transition shadow-sm"></textarea>
+          </div>
+          <p class="text-xs text-slate-400 text-right">* 위 박스에서 내용을 직접 수정한 후 [진단서 복사]를 누르면 수정된 내용이 복사됩니다.</p>
+        </div>
+
+        <!-- 2) 진단서 '비고' 항목 내용 -->
+        <div class="space-y-2.5 pt-4 border-t border-slate-200">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+              진단서 '비고' 항목
+            </h2>
+            <button type="button" onclick="copyRemark()" class="text-xs font-semibold px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-lg transition shadow-sm flex items-center gap-1.5" id="copyRemarkBtn">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+              <span>비고 복사</span>
+            </button>
+          </div>
+
+          <div class="relative">
+            <textarea id="remarkText" rows="3" class="w-full p-3.5 rounded-xl border border-slate-300 bg-slate-50 font-mono text-xs md:text-sm leading-relaxed text-slate-800 outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white resize-y transition shadow-sm">단, 상기 치료 기간은 &lt;의료법 시행규칙&gt; 제9조 제2항 제9호에 규정한 상해진단서 상의 치료기간(진단주수)과 무관한 실제 치료에 필요한 기간을 의미하며, 환자의 회복 상태에 따라 추후 재진에 의해 변경될 수 있습니다.</textarea>
+          </div>
+          <p class="text-xs text-slate-400 text-right">* [비고 복사] 버튼을 누른 후 진단서 '비고' 란에 그대로 붙여넣으시면 됩니다.</p>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+</div>
+
+  <script>
+    // 영상검사 시행여부 토글
+    function toggleImagingSection(isYes) {
+      const section = document.getElementById('imagingDetailsSection');
+      if (isYes) {
+        section.classList.remove('hidden');
+      } else {
+        section.classList.add('hidden');
+      }
+    }
+
+    // 날짜 문자열(YYYY-MM-DD)을 로컬 Date 객체로 파싱
+    function parseDate(dateStr) {
+      const [y, m, d] = dateStr.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+
+    // Date 객체를 XXXX.XX.XX. 형식으로 변환 (점 포함)
+    function formatDateDot(dateObj) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const d = String(dateObj.getDate()).padStart(2, '0');
+      return `${y}.${m}.${d}.`;
+    }
+
+    // 날짜에 일수를 더한 새 Date 객체 반환
+    function addDays(dateObj, days) {
+      const result = new Date(dateObj);
+      result.setDate(result.getDate() + days);
+      return result;
+    }
+
+    // 진단서 작성 함수
+    function generateCertificate() {
+      const accidentDate = document.getElementById('accidentDate').value;
+      if (!accidentDate) {
+        alert('사고 발생일을 입력해주세요.');
+        document.getElementById('accidentDate').focus();
+        return;
+      }
+
+      const imagingTestEl = document.querySelector('input[name="imagingTest"]:checked');
+      if (!imagingTestEl) {
+        alert('영상 검사 시행 유무(시행 / 미시행)를 선택해주세요.');
+        return;
+      }
+      const imagingTest = imagingTestEl.value;
+      let imagingDate = '';
+      let imagingHospital = '';
+      let bodyPart = '';
+      let imagingType = '';
+      let imagingContent = '';
+
+      if (imagingTest === '시행' || imagingTest === 'YES') {
+        imagingDate = document.getElementById('imagingDate').value;
+        if (!imagingDate) {
+          alert('영상검사 시행일을 입력해주세요.');
+          document.getElementById('imagingDate').focus();
+          return;
+        }
+        imagingHospital = document.getElementById('imagingHospital').value.trim();
+        const bodyPartEl = document.querySelector('input[name="bodyPart"]:checked');
+        if (!bodyPartEl) {
+          alert('검사 부위를 선택해주세요.');
+          return;
+        }
+        bodyPart = bodyPartEl.value;
+
+        const imagingTypeEl = document.querySelector('input[name="imagingType"]:checked');
+        if (!imagingTypeEl) {
+          alert('검사 종류(MRI, CT, X-Ray)를 선택해주세요.');
+          return;
+        }
+        imagingType = imagingTypeEl.value;
+        imagingContent = document.getElementById('imagingContent').value.trim();
+      }
+
+      const extensionReason = document.getElementById('extensionReason').value.trim();
+      const treatmentDurationEl = document.querySelector('input[name="treatmentDuration"]:checked');
+      if (!treatmentDurationEl) {
+        alert('8주 이후 치료 필요 기간(2주, 3주, 4주)을 선택해주세요.');
+        return;
+      }
+      const treatmentDuration = treatmentDurationEl.value;
+
+      // 8주 초과 기간 계산
+      // 사고일 + 56일이 8주차 마지막 날, + 57일이 8주 초과 시작일
+      const accDate = parseDate(accidentDate);
+      const startDate = addDays(accDate, 57);
+
+      const weekNumMap = { '2주': 2, '3주': 3, '4주': 4 };
+      const weekKoreanTextMap = {
+        '2주': '2(이)주간',
+        '3주': '3(삼)주간',
+        '4주': '4(사)주간'
+      };
+
+      const selectedWeeks = weekNumMap[treatmentDuration] || 3;
+      const koreanWeeks = weekKoreanTextMap[treatmentDuration] || `${selectedWeeks}주간`;
+
+      // 종료일 = accDate + 56일 + (selectedWeeks * 7)일
+      const endDate = addDays(accDate, 56 + (selectedWeeks * 7));
+
+      const startDateStr = formatDateDot(startDate);
+      const endDateStr = formatDateDot(endDate);
+
+      // 치료 기간 연장 필요 사유 (미입력 시 기본값)
+      const reasonText = extensionReason || 'Neck Pain & Rt. Upperlimb Numbness (NRS 7, Spurling +/-, C-ROM Rot. 30+/45-)';
+
+      // 텍스트 생성 (지정된 진단서 양식)
+      let text = `상기 환자분은 상기 발병일에 발생한 상기 증상 및 병명으로 본원에서 진료중인 환자분으로, 진단일인 현재까지도 ${reasonText} 으로 업무 수행 및 일상 생활에 불편함을 호소하고 있습니다.\n`;
+
+      if (imagingTest === '시행' || imagingTest === 'YES') {
+        const imgDateStr = formatDateDot(parseDate(imagingDate));
+        const hospitalStr = imagingHospital ? `${imagingHospital} ` : '';
+        const contentStr = imagingContent ? imagingContent : '특이 소견 관찰됨';
+        text += `(${imgDateStr} ${hospitalStr}${bodyPart} ${imagingType}상 ${contentStr})\n`;
+      }
+
+      text += `따라서 사고 발생일로부터 8주를 초과하는 기간인 ${startDateStr}부터 ${endDateStr}까지 ${koreanWeeks}의 추가적인 치료 및 경과 관찰이 필요하리라 사료됩니다.\n\n`;
+      text += `(본 진단서는 <자동차손해배상 보장법 시행령> 제11조의2 및 <자동차보험진료수가에 관한 기준>에 따른 경상환자 장기치료(8주 초과) 필요성 검토 제출용으로 상기 용도 외에는 사용 불가합니다.)`;
+
+      const resultCard = document.getElementById('resultCard');
+      const resultPlaceholder = document.getElementById('resultPlaceholder');
+      const resultContent = document.getElementById('resultContent');
+      const resultText = document.getElementById('resultText');
+      
+      resultText.value = text;
+      
+      // 모바일에서도 보이도록 hidden 해제
+      resultCard.classList.remove('hidden');
+      resultPlaceholder.classList.add('hidden');
+      resultContent.classList.remove('hidden');
+
+      // 모바일(화면 폭 1024px 미만)인 경우 결과 영역으로 스크롤 이동
+      if (window.innerWidth < 1024) {
+        resultCard.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // 클립보드 복사 함수 (수정된 textarea 내용 그대로 복사)
+    function copyResult() {
+      const resultText = document.getElementById('resultText').value;
+      if (!resultText) {
+        alert('복사할 진단서 내용이 없습니다.');
+        return;
+      }
+      navigator.clipboard.writeText(resultText).then(() => {
+        const copyBtn = document.getElementById('copyBtn');
+        const origHTML = copyBtn.innerHTML;
+        copyBtn.innerHTML = `
+          <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <span class="text-white font-bold">복사 완료!</span>
+        `;
+        setTimeout(() => {
+          copyBtn.innerHTML = origHTML;
+        }, 2000);
+      }).catch(err => {
+        alert('복사에 실패했습니다. 텍스트를 직접 드래그하여 복사해주세요.');
+      });
+    }
+
+    // 진단서 '비고' 항목 복사 함수
+    function copyRemark() {
+      const remarkText = document.getElementById('remarkText').value;
+      if (!remarkText) return;
+      navigator.clipboard.writeText(remarkText).then(() => {
+        const copyBtn = document.getElementById('copyRemarkBtn');
+        const origHTML = copyBtn.innerHTML;
+        copyBtn.innerHTML = `
+          <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <span class="text-white font-bold">복사 완료!</span>
+        `;
+        setTimeout(() => {
+          copyBtn.innerHTML = origHTML;
+        }, 2000);
+      }).catch(err => {
+        alert('복사에 실패했습니다. 텍스트를 직접 드래그하여 복사해주세요.');
+      });
+    }
+
+    // 기본 날짜 설정 (사고 발생일: 7주 전, 영상검사 시행일: 4주 전)
+    window.addEventListener('DOMContentLoaded', () => {
+      const today = new Date();
+
+      const formatLocalYMD = d => {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+      };
+
+      // 사고 발생일: 7주 전 (49일 전)
+      const accidentDefault = new Date(today);
+      accidentDefault.setDate(today.getDate() - (7 * 7));
+
+      // 영상검사 시행일: 4주 전 (28일 전)
+      const imagingDefault = new Date(today);
+      imagingDefault.setDate(today.getDate() - (4 * 7));
+
+      document.getElementById('accidentDate').value = formatLocalYMD(accidentDefault);
+      document.getElementById('imagingDate').value = formatLocalYMD(imagingDefault);
+
+      // 최종 업데이트 날짜 자동 표기 (document.lastModified 기준)
+      try {
+        const lastMod = new Date(document.lastModified);
+        if (!isNaN(lastMod.getTime()) && lastMod.getFullYear() > 2020) {
+          const y = lastMod.getFullYear();
+          const m = String(lastMod.getMonth() + 1).padStart(2, '0');
+          const d = String(lastMod.getDate()).padStart(2, '0');
+          const updateEl = document.getElementById('lastUpdatedText');
+          if (updateEl) {
+            updateEl.textContent = `최종 업데이트 : ${y}.${m}.${d}.`;
+          }
+        }
+      } catch (e) {}
+    });
+  </script>
+</body>
+</html>
