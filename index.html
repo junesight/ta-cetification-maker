@@ -282,26 +282,7 @@
           <p class="text-xs text-slate-400 text-right">* 위 박스에서 내용을 직접 수정한 후 [진단서 복사]를 누르면 수정된 내용이 복사됩니다.</p>
         </div>
 
-        <!-- 2) 진단서 '용도' 항목 내용 -->
-        <div class="space-y-2.5 pt-4 border-t border-slate-200">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
-              진단서 '용도' 항목
-            </h2>
-            <button type="button" onclick="copyUsage()" class="text-xs font-semibold px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-lg transition shadow-sm flex items-center gap-1.5" id="copyUsageBtn">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-              <span>용도 복사</span>
-            </button>
-          </div>
-
-          <div class="relative">
-            <input type="text" id="usageText" value="자배법 시행령에 따른 경상환자 장기치료 심사 제출용" class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 font-mono text-xs md:text-sm text-slate-800 outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition shadow-sm">
-          </div>
-          <p class="text-xs text-slate-400 text-right">* [용도 복사] 버튼을 누른 후 진단서 '용도' 란에 그대로 붙여넣으시면 됩니다.</p>
-        </div>
-
-        <!-- 3) 진단서 '비고' 항목 내용 -->
+        <!-- 2) 진단서 '비고' 항목 내용 -->
         <div class="space-y-2.5 pt-4 border-t border-slate-200">
           <div class="flex items-center justify-between pb-2 border-b border-slate-100">
             <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
@@ -318,6 +299,25 @@
             <textarea id="remarkText" rows="3" class="w-full p-3.5 rounded-xl border border-slate-300 bg-slate-50 font-mono text-xs md:text-sm leading-relaxed text-slate-800 outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white resize-y transition shadow-sm">단, 상기 치료 기간은 &lt;의료법 시행규칙&gt; 제9조 제2항 제9호에 규정한 상해진단서 상의 치료기간(진단주수)과 무관한 실제 치료에 필요한 기간을 의미하며, 환자의 회복 상태에 따라 추후 재진에 의해 변경될 수 있습니다.</textarea>
           </div>
           <p class="text-xs text-slate-400 text-right">* [비고 복사] 버튼을 누른 후 진단서 '비고' 란에 그대로 붙여넣으시면 됩니다.</p>
+        </div>
+
+        <!-- 3) 진단서 '용도' 항목 내용 -->
+        <div class="space-y-2.5 pt-4 border-t border-slate-200">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+              진단서 '용도' 항목
+            </h2>
+            <button type="button" onclick="copyUsage()" class="text-xs font-semibold px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-lg transition shadow-sm flex items-center gap-1.5" id="copyUsageBtn">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+              <span>용도 복사</span>
+            </button>
+          </div>
+
+          <div class="relative">
+            <input type="text" id="usageText" value="자배법 시행령에 따른 경상환자 장기치료 심사 제출용." class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 font-mono text-xs md:text-sm text-slate-800 outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition shadow-sm">
+          </div>
+          <p class="text-xs text-slate-400 text-right">* [용도 복사] 버튼을 누른 후 진단서 '용도' 란에 그대로 붙여넣으시면 됩니다.</p>
         </div>
       </div>
 
