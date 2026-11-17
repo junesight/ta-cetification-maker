@@ -226,7 +226,7 @@
         <label class="block text-sm font-semibold text-slate-700 mb-3">
           4. 8주 이후 치료 필요 기간
         </label>
-        <div class="grid grid-cols-3 gap-3">
+        <div class="grid grid-cols-4 gap-2.5">
           <label class="cursor-pointer">
             <input type="radio" name="treatmentDuration" value="2주" class="peer sr-only">
             <div class="py-3 text-center rounded-xl border border-slate-300 font-semibold text-sm text-slate-600 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition shadow-sm">
@@ -234,15 +234,21 @@
             </div>
           </label>
           <label class="cursor-pointer">
-            <input type="radio" name="treatmentDuration" value="3주" class="peer sr-only">
+            <input type="radio" name="treatmentDuration" value="4주" class="peer sr-only" checked>
             <div class="py-3 text-center rounded-xl border border-slate-300 font-semibold text-sm text-slate-600 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition shadow-sm">
-              3주
+              4주
             </div>
           </label>
           <label class="cursor-pointer">
-            <input type="radio" name="treatmentDuration" value="4주" class="peer sr-only">
+            <input type="radio" name="treatmentDuration" value="6주" class="peer sr-only">
             <div class="py-3 text-center rounded-xl border border-slate-300 font-semibold text-sm text-slate-600 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition shadow-sm">
-              4주
+              6주
+            </div>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="treatmentDuration" value="8주" class="peer sr-only">
+            <div class="py-3 text-center rounded-xl border border-slate-300 font-semibold text-sm text-slate-600 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition shadow-sm">
+              8주
             </div>
           </label>
         </div>
@@ -306,7 +312,7 @@
           </div>
 
           <div class="relative">
-            <textarea id="remarkText" rows="3" class="w-full p-3.5 rounded-xl border border-slate-300 bg-slate-50 font-mono text-xs md:text-sm leading-relaxed text-slate-800 outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white resize-y transition shadow-sm">단, 상기 치료 기간은 &lt;의료법 시행규칙&gt; 제9조 제2항 제9호에 규정한 상해진단서 상의 치료기간(진단주수)과 무관한 실제 치료에 필요한 기간을 의미하며, 환자의 회복 상태에 따라 추후 재진에 의해 변경될 수 있습니다.</textarea>
+            <textarea id="remarkText" rows="5" class="w-full p-3.5 rounded-xl border border-slate-300 bg-slate-50 font-mono text-xs md:text-sm leading-relaxed text-slate-800 outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white resize-y transition shadow-sm">단, 상기 치료 기간은 &lt;의료법 시행규칙&gt; 제9조 제2항 제9호에 규정한 상해진단서 상의 치료기간(진단주수)과 무관한 실제 치료에 필요한 기간을 의미하며, 환자의 회복 상태에 따라 추후 재진에 의해 변경될 수 있습니다.</textarea>
           </div>
           <p class="text-xs text-slate-400 text-right">* [비고 복사] 버튼을 누른 후 진단서 '비고' 란에 그대로 붙여넣으시면 됩니다.</p>
         </div>
@@ -325,7 +331,7 @@
           </div>
 
           <div class="relative">
-            <input type="text" id="usageText" value="자배법 시행령에 따른 경상환자 장기치료 심사 제출용." class="w-full p-3 rounded-xl border border-slate-300 bg-slate-50 font-mono text-xs md:text-sm text-slate-800 outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition shadow-sm">
+            <textarea id="usageText" rows="2" class="w-full p-3.5 rounded-xl border border-slate-300 bg-slate-50 font-mono text-xs md:text-sm leading-relaxed text-slate-800 outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white resize-y transition shadow-sm">&lt;자동차손해배상 보장법 시행령&gt; 에 따른 경상환자 장기치료(8주 초과) 심사 제출용(해당 용도 외 사용 불가).</textarea>
           </div>
           <p class="text-xs text-slate-400 text-right">* [용도 복사] 버튼을 누른 후 진단서 '용도' 란에 그대로 붙여넣으시면 됩니다.</p>
         </div>
@@ -416,7 +422,7 @@
       const extensionReason = document.getElementById('extensionReason').value.trim();
       const treatmentDurationEl = document.querySelector('input[name="treatmentDuration"]:checked');
       if (!treatmentDurationEl) {
-        alert('8주 이후 치료 필요 기간(2주, 3주, 4주)을 선택해주세요.');
+        alert('8주 이후 치료 필요 기간(2주, 4주, 6주, 8주)을 선택해주세요.');
         return;
       }
       const treatmentDuration = treatmentDurationEl.value;
@@ -426,14 +432,15 @@
       const accDate = parseDate(accidentDate);
       const startDate = addDays(accDate, 57);
 
-      const weekNumMap = { '2주': 2, '3주': 3, '4주': 4 };
+      const weekNumMap = { '2주': 2, '4주': 4, '6주': 6, '8주': 8 };
       const weekKoreanTextMap = {
         '2주': '2(이)주간',
-        '3주': '3(삼)주간',
-        '4주': '4(사)주간'
+        '4주': '4(사)주간',
+        '6주': '6(육)주간',
+        '8주': '8(팔)주간'
       };
 
-      const selectedWeeks = weekNumMap[treatmentDuration] || 3;
+      const selectedWeeks = weekNumMap[treatmentDuration] || 4;
       const koreanWeeks = weekKoreanTextMap[treatmentDuration] || `${selectedWeeks}주간`;
 
       // 종료일 = accDate + 56일 + (selectedWeeks * 7)일
@@ -446,7 +453,7 @@
       const reasonText = extensionReason || 'Neck Pain & Rt. Upperlimb Numbness (NRS 7, Spurling +/-, C-ROM Rot. 30+/45-)';
 
       // 텍스트 생성 (지정된 진단서 양식)
-      let text = `상기 환자분은 상기 발병일에 발생한 상기 증상 및 병명으로 본원에서 진료중인 환자분으로, 진단일인 현재까지도 ${reasonText} 으로 업무 수행 및 일상 생활에 불편함을 호소하고 있습니다.\n`;
+      let text = `상기 환자분은 상기 발병일에 발생한 상기 증상 및 병명으로 본원에서 진료중인 환자분으로, 재평가일인 현재까지도 ${reasonText} 으로 업무 수행 및 일상 생활에 불편함을 호소하고 있습니다.\n`;
 
       if (imagingTest === '시행' || imagingTest === 'YES') {
         const imgDateStr = formatDateDot(parseDate(imagingDate));
@@ -455,8 +462,7 @@
         text += `(${imgDateStr} ${hospitalStr}${bodyPart} ${imagingType}상 ${contentStr})\n`;
       }
 
-      text += `따라서 사고 발생일로부터 8주를 초과하는 기간인 ${startDateStr}부터 ${endDateStr}까지 ${koreanWeeks}의 추가적인 치료 및 경과 관찰이 필요하리라 사료됩니다.\n\n`;
-      text += `(본 진단서는 <자동차손해배상 보장법 시행령> 제11조의2 및 <자동차보험진료수가에 관한 기준>에 따른 경상환자 장기치료(8주 초과) 심사 제출용으로 상기 용도 외에는 사용 불가합니다.)`;
+      text += `따라서 사고 발생일로부터 8주를 초과하는 기간인 ${startDateStr}부터 ${endDateStr}까지 ${koreanWeeks}의 추가적인 치료 및 경과 관찰이 필요하리라 사료됩니다.`;
 
       const resultCard = document.getElementById('resultCard');
       const resultPlaceholder = document.getElementById('resultPlaceholder');
